@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: PodList
+items:
+{{- range .Pods }}
+  - apiVersion: v1
+    kind: Pod
+    metadata:
+      name: {{ .Name }}
+      namespace: {{if .Namespace }} {{.Namespace }} {{else}} default {{end}}
+      labels: {}
+    spec:
+      containers:
+         - name: {{ .ContainerName }}
+           image: {{ .Image }}
+           resources:
+            limits:
+             cpu: "{{ .CPULimit }}"
+             memory: "{{ .MemoryLimit }}Gi"
+            requests:
+             cpu: "{{ .CPURequest }}"
+             memory: "{{ .MemoryRequest }}Gi"
+      schedulerName: {{if .SchedulerName }} {{.SchedulerName }} {{else}} default-scheduler {{end}}
+{{ end }}
